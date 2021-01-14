@@ -54,19 +54,18 @@
     "coffeescript": "^2.5.1",
     "husky": "^5.0.6",
     "mocha": "^8.2.1",
-    "should": "^13.2.3"
+    "should": "^13.2.3",
+    "standard-version": "^9.1.0"
   },
   "optionalDependencies": {},
   "scripts": {
     "postinstall": "husky install",
-    "preversion": "grep '## Trunk' CHANGELOG.md",
-    "version": "version=`grep '^  \"version\": ' package.json | sed 's/.*\"\\([0-9\\.]*\\)\".*/\\1/'` && sed -i \"s/## Trunk/## Version $version/\" CHANGELOG.md && git add CHANGELOG.md",
-    "postversion": "git push && git push --tags && npm publish",
-    "patch": "npm version patch -m 'Bump to version %s'",
-    "minor": "npm version minor -m 'Bump to version %s'",
-    "major": "npm version major -m 'Bump to version %s'",
     "build": "coffee -b -o lib src",
     "pretest": "npm run build",
-    "test": "mocha 'test/**/*.coffee'"
+    "test": "mocha 'test/**/*.coffee'",
+    "release": "standard-version",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch",
+    "release:major": "standard-version --release-as major"
   }
 }
