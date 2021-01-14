@@ -1,21 +1,25 @@
 
 config = require '../test'
-they = require('../src').configure config
+they = require('../src').configure [
+    null
+  ,
+    ssh: host: '127.0.0.1', username: process.env.USER
+]
 
 describe 'they', ->
 
-  they 'return `true`', (ssh) ->
+  they 'return `true`', (conf) ->
     true
 
-  they 'return `{}`', (ssh) ->
+  they 'return `{}`', (conf) ->
     {}
 
-  they 'return `Promise.resolve`', (ssh) ->
+  they 'return `Promise.resolve`', (conf) ->
     new Promise (resolve) -> setImmediate resolve
 
-  they 'call next synchronously', (ssh, next) ->
+  they 'call next synchronously', (conf, next) ->
     next()
 
-  they 'call next asynchronously', (ssh, next) ->
+  they 'call next asynchronously', (conf, next) ->
     setImmediate ->
       next()

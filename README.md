@@ -1,90 +1,61 @@
 
-# Node.js ssh2-they
+# Node.js mocha-they
 
-Extends [Mocha][mocha] with a new `they` function replacing `it`. The goal is 
-to execute the same test in multiple environments. This package was originally 
-written to test [ssh2-fs](https://github.com/adaltas/node-ssh2-fs), [ssh2-exec](https://github.com/adaltas/node-ssh2-exec) and [Nikita](http://nikita.js.org/). For example, in 
-those packages, each test is run twice: the first time on a local environment and the second time over SSH.
+Extends [Mocha](https://mochajs.org/) with a new `they` function replacing `it`. The goal is to execute the same test in multiple configuration environments.
 
-If no environment is provided, the default behaviour of this package is to attempt to open a passwordless ssh connection on localhost with the current running user. Thus, it expects 
-correct deployment of your ssh public key inside your own authorized_key file.
-
-Additionally, you can call the `configure` function with multiple environment parameters. Refer to the ["ssh2-connect"](https://github.com/adaltas/node-ssh2-connect) and ["ssh2"](https://github.com/mscdex/ssh2) packages for a complete list of supported options.
+This package was originally written to test [ssh2-fs](https://github.com/adaltas/node-ssh2-fs), [ssh2-exec](https://github.com/adaltas/node-ssh2-exec) and [Nikita](http://nikita.js.org/). For example, in those packages, each test is run twice: the first time on a local environment and a second time on a remote environment with SSH.
 
 ## Installation
 
-This is OSS and licensed under the [new BSD license][license].
+This is OSS and licensed under the [MIT license](https://github.com/adaltas/node-mocha-they/blob/master/LICENSE.md).
 
 ```bash
-npm install ssh2-fs
+npm install mocha-fs
 ```
 
-## Examples
+## Usage
 
-The below examples found inspiration in the [exists test](https://github.com/adaltas/node-ssh2-fs/blob/master/test/exists.coffee) of the [ssh2-fs module](https://github.com/adaltas/node-ssh2-fs).
+The package  `mocha-they` exports a function. Call this function with an array of configuration to initialize it.
+
+The configuration elements can be anything. When an an object, an optional label property can be provided to customized the message output.
+
+It returns a new function which behave exactly like the `it` function in mocha. The only difference is the precence of the configuration element as the first argument of the test. Like with `it`, you can customize Mocha with the `only` and `skip` directives.
+
+## Example
+
+The below example found inspiration in the [Nikita `execute` action](https://nikita.js.org) which execute a Shell command.
 
 This test will connect to localhost with the current working user:
 
 ```js
 const should = require('should')
 const fs = require('ssh2-fs')
-const they = require('ssh2-they')
-
-describe('exists', function(){
-  they('on file', function({ssh}, next){
-    fs.exists( ssh, "#{__filename}", function(err, exists){
-      exists.should.be.true()
-      next()
-    })
-  })
-})
-```
-
-This test will attempt a remote connection using the root user:
-
-
-```js
-const should = require('should')
-const fs = require('ssh2-fs')
-const they = require('ssh2-they').configure([
-  null,
-  {
-    debug: true,
-    ssh: null
-  }, {
-    debug: true,
-    ssh: {
-      host: 'localhost',
-      port: 22,
-      username: 'root',
-      privateKey: require('fs').readFileSync('/here/is/my/key')
-    }
+const they = require('ssh2-they')([{
+  label: 'local',
+  ssh: null
+}, {
+  label: 'remote',
+  ssh: {
+    host: 'localhost',
+    username: 'root',
+    private_key_path: '~/.ssh/id_rsa'
   }
-])
+}])
 
 describe('exists', function(){
-  they('on file', function({debug, ssh}, next){
-    fs.exists( ssh, "#{__filename}", function(err, exists){
-      exists.should.be.true()
-      next()
-    })
+
+  they('on file', function({ssh}){
+    const {whoami} = await nikita({
+      ssh: ssh
+    }).execute('whoami')
+    whoami.should.eql(
+      !ssh ? require("os").userInfo().username : ssh.username
+    )
   })
+
 })
 ```
-
-## Travis integration
-
-You can make it work with [Travis][travis] by adding the following lines to 
-your ".travis.yml" file:
-
-before_script:
-  - "ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ''"
-  - "cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys"
 
 ## Contributors
 
 *   David Worms: <https://github.com/wdavidw>
-
-[ssh2]: https://github.com/mscdex/ssh2
-[license]: https://github.com/adaltas/node-ssh2-they/blob/master/LICENSE.md
-[travis]: https://travis-ci.org/

@@ -1,16 +1,16 @@
 {
-  "name": "ssh2-they",
-  "version": "2.2.1",
+  "name": "mocha-they",
+  "version": "0.0.0",
   "description": "Extends Mocha with the function `they` to transparently run tests in local and ssh mode",
   "keywords": [
     "ssh",
-    "ssh2",
+    "unit-test",
     "sftp",
     "secure",
     "test",
     "mocha"
   ],
-  "homepage": "https://github.com/adaltas/node-ssh2-they",
+  "homepage": "https://github.com/adaltas/node-mocha-they",
   "license": "MIT",
   "author": "David Worms <david@adaltas.com> (https://www.adaltas.com)",
   "contributors": [],
@@ -43,10 +43,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/adaltas/node-ssh2-they.git"
+    "url": "git://github.com/adaltas/node-mocha-they.git"
   },
   "dependencies": {
-    "ssh2-connect": "^3.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
