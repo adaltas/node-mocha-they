@@ -22,7 +22,7 @@ configure = (configs...) ->
     null
   to_args = (msg, handler, context, config)->
     [
-      "#{msg} | (#{config.label})"
+      "#{msg} (#{config.label})"
     ,
       if [0, 1].includes handler.length
       then ->
@@ -37,11 +37,9 @@ configure = (configs...) ->
       it.apply null, to_args msg, handler, context, config
   they.only = (msg, handler) ->
     configs.map (config) ->
-      {msg, handler: wrap} = to_args msg, handler, context, config
       it.only.apply null, to_args msg, handler, context, config
   they.skip = (msg, handler) ->
     configs.map (config) ->
-      {msg, handler: wrap} = to_args msg, handler, context, config
       it.skip.apply null, to_args msg, handler, context, config
   # Return the final result
   they
