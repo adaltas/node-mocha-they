@@ -1,6 +1,6 @@
 {
   "name": "mocha-they",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Extends Mocha with the function `they` to transparently run tests in local and ssh mode",
   "keywords": [
     "ssh",
@@ -45,8 +45,7 @@
     "type": "git",
     "url": "git://github.com/adaltas/node-mocha-they.git"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
