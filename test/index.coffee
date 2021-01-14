@@ -10,14 +10,15 @@ describe 'they', ->
 
   they 'return `true`', (conf) ->
     true
-
+  
   they 'return `{}`', (conf) ->
     {}
-
+  
   they 'return `Promise.resolve`', (conf) ->
     new Promise (resolve) -> setImmediate resolve
 
   they 'call next synchronously', (conf, next) ->
+    @timeout 200
     next()
 
   they 'call next asynchronously', (conf, next) ->
