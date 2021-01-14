@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* refactor: rename label to name
 * fix: handle 0 argument length
 
 ## Version 2.2.1

@@ -17,7 +17,7 @@ running both locally and remotely
       configs = flatten configs
       for config, i in configs
         configs[i] = config = {} unless config?
-        configs[i].name ?= "#{i}.#{unless config.ssh?.host then 'local' else 'remote'}"
+        configs[i].label ?= "#{i}.#{unless config.ssh?.host then 'local' else 'remote'}"
         if config.ssh is true
           configs[i].ssh = host: 'localhost', port: 22
       # Local execution for promises
@@ -59,35 +59,35 @@ running both locally and remotely
         if [0, 1].includes handler.length
           for config, i in configs then do (config, i) ->
             unless config.ssh
-            then it "#{msg} (#{config.name})", -> promise_local @, config, handler
-            else it "#{msg} (#{config.name})", -> promise_remote @, config, handler
+            then it "#{msg} (#{config.label})", -> promise_local @, config, handler
+            else it "#{msg} (#{config.label})", -> promise_remote @, config, handler
         else
           for config, i in configs then do (config, i) ->
             unless config.ssh
-            then it "#{msg} (#{config.name})", (next) -> callback_local @, config, handler, next
-            else it "#{msg} (#{config.name})", (next) -> callback_remote @, config, handler, next
+            then it "#{msg} (#{config.label})", (next) -> callback_local @, config, handler, next
+            else it "#{msg} (#{config.label})", (next) -> callback_remote @, config, handler, next
       they.only = (msg, handler) ->
         if [0, 1].includes handler.length
           for config, i in configs then do (config, i) ->
             unless config.ssh
-            then it.only "#{msg} (#{config.name})", -> promise_local @, config, handler
-            else it.only "#{msg} (#{config.name})", -> promise_remote @, config, handler
+            then it.only "#{msg} (#{config.label})", -> promise_local @, config, handler
+            else it.only "#{msg} (#{config.label})", -> promise_remote @, config, handler
         else
           for config, i in configs then do (config, i) ->
             unless config.ssh
-            then it.only "#{msg} (#{config.name})", (next) -> callback_local @, config, handler, next
-            else it.only "#{msg} (#{config.name})", (next) -> callback_remote @, config, handler, next
+            then it.only "#{msg} (#{config.label})", (next) -> callback_local @, config, handler, next
+            else it.only "#{msg} (#{config.label})", (next) -> callback_remote @, config, handler, next
       they.skip = (msg, handler) ->
         if [0, 1].includes handler.length
           for config, i in configs then do (config, i) ->
             unless config.ssh
-            then it.skip "#{msg} (#{config.name})", -> promise_local @, config, handler
-            else it.skip "#{msg} (#{config.name})", -> promise_remote @, config, handler
+            then it.skip "#{msg} (#{config.label})", -> promise_local @, config, handler
+            else it.skip "#{msg} (#{config.label})", -> promise_remote @, config, handler
         else
           for config, i in configs then do (config, i) ->
             unless config.ssh
-            then it.skip "#{msg} (#{config.name})", (next) -> callback_local @, config, handler, next
-            else it.skip "#{msg} (#{config.name})", (next) -> callback_remote @, config, handler, next
+            then it.skip "#{msg} (#{config.label})", (next) -> callback_local @, config, handler, next
+            else it.skip "#{msg} (#{config.label})", (next) -> callback_remote @, config, handler, next
       # Return the final result
       they
         
