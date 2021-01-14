@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/adaltas/node-mocha-they/compare/v0.1.0...v0.1.1) (2021-01-14)
+
+
+### Bug Fixes
+
+* use pinst ([8c60f22](https://github.com/adaltas/node-mocha-they/commit/8c60f22c48bdec528bf412d565efda253526bdef))
+
 ## 0.1.0 (2021-01-14)
 
 
