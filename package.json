@@ -49,12 +49,16 @@
     "ssh2-connect": "^3.1.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "coffeescript": "^2.5.1",
+    "husky": "^5.0.6",
     "mocha": "^8.2.1",
     "should": "^13.2.3"
   },
   "optionalDependencies": {},
   "scripts": {
+    "postinstall": "husky install",
     "preversion": "grep '## Trunk' CHANGELOG.md",
     "version": "version=`grep '^  \"version\": ' package.json | sed 's/.*\"\\([0-9\\.]*\\)\".*/\\1/'` && sed -i \"s/## Trunk/## Version $version/\" CHANGELOG.md && git add CHANGELOG.md",
     "postversion": "git push && git push --tags && npm publish",
