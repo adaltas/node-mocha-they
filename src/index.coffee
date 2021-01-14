@@ -46,7 +46,5 @@ configure = (configs...) ->
   # Return the final result
   they
     
-module.exports = configure()
-
-module.exports.configure = (configs...) ->
+module.exports = (configs...) ->
   configure configs...

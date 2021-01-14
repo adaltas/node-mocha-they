@@ -1,6 +1,6 @@
 
 config = require '../test'
-they = require('../src').configure [
+they = require('../src') [
     null
   ,
     ssh: host: '127.0.0.1', username: process.env.USER
