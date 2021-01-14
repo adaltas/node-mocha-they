@@ -1,6 +1,10 @@
 
 # Changelog
 
+## Trunk
+
+* fix: handle 0 argument length
+
 ## Version 2.2.1
 
 * feat: re-introduce callback support

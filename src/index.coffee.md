@@ -56,7 +56,7 @@ running both locally and remotely
         null
       # Define our main entry point
       they = (msg, handler) ->
-        if handler.length is 1
+        if [0, 1].includes handler.length
           for config, i in configs then do (config, i) ->
             unless config.ssh
             then it "#{msg} (#{config.name})", -> promise_local @, config, handler
@@ -67,7 +67,7 @@ running both locally and remotely
             then it "#{msg} (#{config.name})", (next) -> callback_local @, config, handler, next
             else it "#{msg} (#{config.name})", (next) -> callback_remote @, config, handler, next
       they.only = (msg, handler) ->
-        if handler.length is 1
+        if [0, 1].includes handler.length
           for config, i in configs then do (config, i) ->
             unless config.ssh
             then it.only "#{msg} (#{config.name})", -> promise_local @, config, handler
@@ -78,7 +78,7 @@ running both locally and remotely
             then it.only "#{msg} (#{config.name})", (next) -> callback_local @, config, handler, next
             else it.only "#{msg} (#{config.name})", (next) -> callback_remote @, config, handler, next
       they.skip = (msg, handler) ->
-        if handler.length is 1
+        if [0, 1].includes handler.length
           for config, i in configs then do (config, i) ->
             unless config.ssh
             then it.skip "#{msg} (#{config.name})", -> promise_local @, config, handler
