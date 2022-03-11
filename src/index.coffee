@@ -1,4 +1,6 @@
 
+{clone} = require 'mixme'
+
 flatten =  (arr) ->
   ret = []
   for i in [0 ... arr.length]
@@ -34,13 +36,13 @@ configure = (configs...) ->
   # Define our main entry point
   they = (msg, handler) ->
     configs.map (config) ->
-      it.apply null, to_args msg, handler, context, config
+      it.apply null, to_args msg, handler, context, clone config
   they.only = (msg, handler) ->
     configs.map (config) ->
-      it.only.apply null, to_args msg, handler, context, config
+      it.only.apply null, to_args msg, handler, context, clone config
   they.skip = (msg, handler) ->
     configs.map (config) ->
-      it.skip.apply null, to_args msg, handler, context, config
+      it.skip.apply null, to_args msg, handler, context, clone config
   # Return the final result
   they
     

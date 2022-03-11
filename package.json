@@ -45,7 +45,9 @@
     "type": "git",
     "url": "git://github.com/adaltas/node-mocha-they.git"
   },
-  "dependencies": {},
+  "dependencies": {
+    "mixme": "^0.5.4"
+  },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
