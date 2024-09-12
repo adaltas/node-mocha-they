@@ -14,19 +14,6 @@
   "license": "MIT",
   "author": "David Worms <david@adaltas.com> (https://www.adaltas.com)",
   "contributors": [],
-  "coffeelintConfig": {
-    "indentation": {
-      "level": "error",
-      "value": 2
-    },
-    "line_endings": {
-      "level": "error",
-      "value": "unix"
-    },
-    "max_line_length": {
-      "level": "ignore"
-    }
-  },
   "engines": {
     "node": ">=0.10.1"
   },
@@ -34,8 +21,7 @@
   "mocha": {
     "throw-deprecation": true,
     "require": [
-      "should",
-      "coffeescript/register"
+      "should"
     ],
     "timeout": 40000,
     "reporter": "spec",
@@ -51,21 +37,18 @@
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
-    "coffeescript": "^2.7.0",
     "husky": "^9.1.6",
     "mocha": "^10.7.3",
     "should": "^13.2.3",
     "standard-version": "^9.5.0"
   },
   "scripts": {
-    "build": "coffee -b -o lib src",
     "publish": "git push --follow-tags origin master && npm publish",
     "prepare": "husky install",
-    "pretest": "npm run build",
     "release": "standard-version",
     "release:minor": "standard-version --release-as minor",
     "release:patch": "standard-version --release-as patch",
     "release:major": "standard-version --release-as major",
-    "test": "mocha 'test/**/*.coffee'"
+    "test": "mocha 'test/**/*.js'"
   }
 }
