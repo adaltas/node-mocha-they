@@ -1,4 +1,5 @@
-const they = require("../src")([
+import mochaThey from "../src/index.js";
+const they = mochaThey([
   null,
   { ssh: { host: "127.0.0.1", username: process.env.USER } },
 ]);

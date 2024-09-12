@@ -1,4 +1,4 @@
-const { clone } = require("mixme");
+import { clone } from "mixme";
 
 function configure(...configs) {
   // Config normalization
@@ -47,6 +47,6 @@ function configure(...configs) {
   return they;
 }
 
-module.exports = function (...configs) {
-  return configure(...configs);
-};
+export default configure;
+
+export { configure };
