@@ -15,14 +15,14 @@ function configure(...configs) {
   function call(msg, handler, context, config) {
     return [
       `${msg} (${config.label})`,
-      [0, 1].includes(handler.length)
-        ? function () {
-            return handler.call(this, config);
-          }
-        : function (next) {
-            handler.call(this, config, next);
-            return null;
-          },
+      [0, 1].includes(handler.length) ?
+        function () {
+          return handler.call(this, config);
+        }
+      : function (next) {
+          handler.call(this, config, next);
+          return null;
+        },
     ];
   }
   // Define our main entry point

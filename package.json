@@ -17,6 +17,10 @@
   "engines": {
     "node": ">=0.10.1"
   },
+  "lint-staged": {
+    "*.js": "npm run lint:fix",
+    "*.md": "prettier -w"
+  },
   "main": "./lib/index",
   "mocha": {
     "throw-deprecation": true,
@@ -37,12 +41,22 @@
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
+    "@eslint/js": "^9.10.0",
+    "eslint": "^9.10.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-mocha": "^10.5.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "mocha": "^10.7.3",
+    "prettier": "^3.3.3",
     "should": "^13.2.3",
     "standard-version": "^9.5.0"
   },
   "scripts": {
+    "lint:check": "eslint",
+    "lint:fix": "eslint --fix",
+    "lint:staged": "npx lint-staged",
     "publish": "git push --follow-tags origin master && npm publish",
     "prepare": "husky install",
     "release": "standard-version",

@@ -1,3 +1,4 @@
+import should from "should";
 import mochaThey from "../src/index.js";
 const they = mochaThey({ key: "value" });
 

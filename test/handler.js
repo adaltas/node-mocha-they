@@ -5,15 +5,15 @@ const they = mochaThey([
 ]);
 
 describe("they.handler", function () {
-  they("return `true`", function (conf) {
+  they("return `true`", function () {
     return true;
   });
 
-  they("return `{}`", function (conf) {
+  they("return `{}`", function () {
     return {};
   });
 
-  they("return `Promise.resolve`", function (conf) {
+  they("return `Promise.resolve`", function () {
     return new Promise(function (resolve) {
       setImmediate(resolve);
     });
