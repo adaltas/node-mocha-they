@@ -1,17 +1,8 @@
 
 {clone} = require 'mixme'
 
-flatten =  (arr) ->
-  ret = []
-  for i in [0 ... arr.length]
-    if Array.isArray arr[i]
-      ret.push flatten(arr[i])...
-    else
-      ret.push arr[i]
-  ret
-
 configure = (configs...) ->
-  configs = flatten configs
+  configs = configs.flat(Infinity)
   for config, i in configs
     configs[i] = config = {} unless config?
     configs[i].label ?= "#{i}"
@@ -45,6 +36,6 @@ configure = (configs...) ->
       it.skip.apply null, to_args msg, handler, context, clone config
   # Return the final result
   they
-    
+
 module.exports = (configs...) ->
   configure configs...
