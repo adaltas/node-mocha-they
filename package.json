@@ -46,18 +46,17 @@
     "url": "git://github.com/adaltas/node-mocha-they.git"
   },
   "dependencies": {
-    "mixme": "^0.5.4"
+    "mixme": "^1.1.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
-    "coffeescript": "^2.5.1",
-    "husky": "^5.0.6",
-    "mocha": "^8.2.1",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "coffeescript": "^2.7.0",
+    "husky": "^9.1.6",
+    "mocha": "^10.7.3",
     "should": "^13.2.3",
-    "standard-version": "^9.1.0"
+    "standard-version": "^9.5.0"
   },
-  "optionalDependencies": {},
   "scripts": {
     "build": "coffee -b -o lib src",
     "publish": "git push --follow-tags origin master && npm publish",
