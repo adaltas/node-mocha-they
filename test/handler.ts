@@ -1,5 +1,13 @@
-import mochaThey from "../src/index.js";
-const they = mochaThey([
+import { configure } from "../src/index.js";
+
+interface Config {
+  ssh: {
+    host: string;
+    username: string | undefined;
+  };
+}
+
+const they = configure<null | Config>([
   null,
   { ssh: { host: "127.0.0.1", username: process.env.USER } },
 ]);
