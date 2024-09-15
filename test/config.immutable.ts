@@ -1,3 +1,4 @@
+import "should";
 import { configure } from "../src/index.js";
 
 type Config = {
@@ -11,7 +12,7 @@ describe("they.config.immutable", function () {
     conf.immutable = "ohno";
   });
 
-  they("immutable part 2", function (conf: Record<string, any>) {
+  they("immutable part 2", function (conf: Config) {
     conf.immutable.should.eql("value");
   });
 });

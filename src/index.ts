@@ -21,14 +21,10 @@ declare module "mocha" {
 type TheyFunc<T> = (this: mocha.Context, config: T, done: mocha.Done) => void;
 type TheyAsyncFunc<T> = (this: mocha.Context, config: T) => PromiseLike<any>;
 
-type TheyConfig =
-  | unknown
-  | (Record<string, unknown> & {
-      label?: string;
-    });
+type ExcludeFunction<T> = T extends Function ? never : T;
 
 // function configure<T extends Record<=string, unknown>[]>(...args: T) {
-function configure<T extends TheyConfig>(configs: T[]) {
+function configure<T>(configs: (T | (() => T))[]) {
   // Config normalization
   const labels = Array(configs.length);
   for (let i = 0; i < configs.length; i++) {
@@ -44,8 +40,13 @@ function configure<T extends TheyConfig>(configs: T[]) {
     msg: string,
     label: string,
     fn: TheyFunc<T> | TheyAsyncFunc<T>,
-    config: T,
+    config: T | (() => T),
   ): [string, mocha.Func | mocha.AsyncFunc] {
+    if (typeof config === "function") {
+      config = (config as () => T)();
+    } else {
+      config = clone(config);
+    }
     return [
       `${msg} (${label})`,
       fn.length === 0 || fn.length === 1 ?
@@ -60,7 +61,7 @@ function configure<T extends TheyConfig>(configs: T[]) {
   // Define our main entry point
   function they(msg: string, fn: TheyFunc<T> | TheyAsyncFunc<T>): mocha.Test[] {
     return configs.map((config, i) => {
-      return it(...handle.call(null, msg, labels[i], fn, clone(config)));
+      return it(...handle.call(null, msg, labels[i], fn, config));
     });
   }
   // Mocha `only` implementation
@@ -69,7 +70,7 @@ function configure<T extends TheyConfig>(configs: T[]) {
     fn: TheyFunc<T> | TheyAsyncFunc<T>,
   ): mocha.Test[] {
     return configs.map((config, i) => {
-      return it.only(...handle.call(null, msg, labels[i], fn, clone(config)));
+      return it.only(...handle.call(null, msg, labels[i], fn, config));
     });
   };
   // Mocha `skip` implementation
@@ -78,7 +79,7 @@ function configure<T extends TheyConfig>(configs: T[]) {
     fn: TheyFunc<T> | TheyAsyncFunc<T>,
   ): mocha.Test[] {
     return configs.map((config, i) => {
-      return it.skip(...handle.call(null, msg, labels[i], fn, clone(config)));
+      return it.skip(...handle.call(null, msg, labels[i], fn, config));
     });
   };
   // Return the final result
