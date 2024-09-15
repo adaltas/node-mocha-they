@@ -61,7 +61,7 @@
     "typescript": "^5.6.2"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.src.json && rollup -c",
+    "build": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
     "lint:check": "eslint",
     "lint:fix": "eslint --fix",
     "lint:staged": "npx lint-staged",

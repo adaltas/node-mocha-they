@@ -4,8 +4,10 @@
   "include": ["./src/**/*.ts"],
   "compilerOptions": {
     "composite": true,
-    "outDir": "./dist/esm",
+    "outDir": "./dist/cjs",
     "declarationDir": "dist/types",
     "rootDir": "./src",
+    "target": "esnext",
+    "module": "CommonJs"
   }
 }
