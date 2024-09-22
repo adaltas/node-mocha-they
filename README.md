@@ -21,21 +21,23 @@ Main steps:
 3. Initialize `they` by calling `configure` with an array of configurations.
 4. Use the `they` function just like `it`.
 
-The package exports a function, `configure`.
+The package exports a function, `configure`. It is written in Typescript and exported in both CommonJs and ESM.
 
 ```ts
 import { configure } from "mocha-they";
 ```
 
-It is written in Typescript and exported in both CommonJs and ESM. Test functions receive a new argument. Typescript users may defined the argument type type.
+Test functions receive a new argument.
+
+For Typescript users, configure is a generic. The first type is required and defines the configuraiton object. The second is optional when `before` is used to alter the configuration
 
 ```ts
-interface Config {
-  ssh?: {
-    host: string;
-    username: string | undefined;
-  };
-}
+function configure<T>(configs: (T | (() => T))[]): They<T>;
+function configure<T, U>(
+  configs: (T | (() => T))[],
+  before: (config: T) => U,
+  after?: (config: U) => void,
+): They<U>;
 ```
 
 Call the `configure` function with an array of values to initialize `they`.
@@ -45,6 +47,12 @@ A configuration may be of any type. The value is passed as the first argument of
 Functions receive a special treatment. They are called before the test and its value is passed to the tet handler as first argument.
 
 ```ts
+interface Config {
+  ssh?: {
+    host: string;
+    username: string | undefined;
+  };
+}
 const they = configure<Config>([
   {
     ssh: undefined,
@@ -56,6 +64,29 @@ const they = configure<Config>([
     ssh: { host: "localhost" },
   }),
 ]);
+```
+
+```ts
+interface Config {
+  ssh?: {
+    host: string;
+    username: string | undefined;
+  };
+}
+const they = configure<Config>(
+  [
+    {
+      ssh: undefined,
+    },
+    {
+      ssh: { host: "127.0.0.1", username: process.env.USER },
+    },
+    () => ({
+      ssh: { host: "localhost" },
+    }),
+  ],
+  (config: Config) => {},
+);
 ```
 
 Finally, use `they` just like `it`.
@@ -135,8 +166,24 @@ The configuration elements can be anything. When an an object, an optional label
 
 It returns a new function which behave exactly like the `it` function in mocha. The only difference is the presence of the configuration element as the first argument of the test. Like with `it`, you can customize Mocha with the `only` and `skip` directives.
 
+## Example using the before and after configuration hooks
+
+A more complexe example covers the [usage of `before` and `after`](./samples/before-after-typescript.ts). The `ssh` object is converted to a fake SSH client and the connection is closed after the tests.
+
+```ts
+Test before/after usage
+    SSH client not connected
+  ✔ Called 3 times (local)
+    connected to 127.0.0.1
+    SSH client called
+  ✔ Called 3 times (ssh object)
+    connected to localhost
+    SSH client called
+  ✔ Called 3 times (2)
+```
+
 ## Contributors
 
-The project is sponsored by [Adaltas](https://www.adaltas.com) based in Paris, France. Adaltas offers support and consulting on distributed system, big data and open source.
+The project is sponsored by [Adaltas](https://www.adaltas.com), a company based in Paris, France. Adaltas offers support and consulting on distributed system, big data and open source.
 
 - David Worms: <https://github.com/wdavidw>

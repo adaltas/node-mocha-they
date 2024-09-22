@@ -18,13 +18,33 @@ declare module "mocha" {
 }
 */
 
-type TheyFunc<T> = (this: mocha.Context, config: T, done: mocha.Done) => void;
-type TheyAsyncFunc<T> = (this: mocha.Context, config: T) => PromiseLike<any>;
+export type TheyFunc<T> = (
+  this: mocha.Context,
+  config: T,
+  done: mocha.Done,
+) => void;
+export type TheyAsyncFunc<T> = (
+  this: mocha.Context,
+  config: T,
+) => PromiseLike<any>;
 
-type ExcludeFunction<T> = T extends Function ? never : T;
+type They<T> = {
+  only: (msg: string, fn: TheyFunc<T> | TheyAsyncFunc<T>) => mocha.Test[];
+  skip: (msg: string, fn: TheyFunc<T> | TheyAsyncFunc<T>) => mocha.Test[];
+  (msg: string, fn: TheyFunc<T> | TheyAsyncFunc<T>): mocha.Test[];
+};
 
-// function configure<T extends Record<=string, unknown>[]>(...args: T) {
-function configure<T>(configs: (T | (() => T))[]) {
+function configure<T>(configs: (T | (() => T))[]): They<T>;
+function configure<T, U>(
+  configs: (T | (() => T))[],
+  before: (config: T) => U | Promise<U>,
+  after?: (config: U) => void,
+): They<U>;
+function configure<T, U = T>(
+  configs: (T | (() => T))[],
+  before?: (config: T) => Promise<U>,
+  after?: (config: T | U) => void | Promise<void>,
+): They<U> {
   // Config normalization
   const labels = Array(configs.length);
   for (let i = 0; i < configs.length; i++) {
@@ -39,7 +59,7 @@ function configure<T>(configs: (T | (() => T))[]) {
   function handle(
     msg: string,
     label: string,
-    fn: TheyFunc<T> | TheyAsyncFunc<T>,
+    fn: TheyFunc<U> | TheyAsyncFunc<U>,
     config: T | (() => T),
   ): [string, mocha.Func | mocha.AsyncFunc] {
     if (typeof config === "function") {
@@ -51,33 +71,67 @@ function configure<T>(configs: (T | (() => T))[]) {
       `${msg} (${label})`,
       fn.length === 0 || fn.length === 1 ?
         (function (this: mocha.Context) {
-          return (fn as TheyAsyncFunc<T>).call(this, config);
+          // return (fn as TheyAsyncFunc<T | U>).call(this, configNormalized);
+          return Promise.resolve()
+            .then(async () => {
+              let configNormalized =
+                before === undefined ? config : await before(config);
+              return configNormalized;
+            })
+            .then((config): [T | U, any] => [
+              config,
+              (fn as TheyAsyncFunc<T | U>).call(this, config),
+            ])
+            .then(async ([config, prom]) => {
+              if (after === undefined) return prom;
+              await after(config);
+              return prom;
+            });
         } as mocha.AsyncFunc)
       : (function (this: mocha.Context, next: mocha.Done) {
-          return (fn as TheyFunc<T>).call(this, config, next);
+          Promise.resolve()
+            .then(async () => {
+              let configNormalized =
+                before === undefined ? config : await before(config);
+              return configNormalized;
+            })
+            .then(
+              (config) =>
+                new Promise<[T | U, any[]]>((resolve) => {
+                  (fn as TheyFunc<T | U>).call(
+                    this,
+                    config,
+                    (...args: any[]) => {
+                      resolve([config, args]);
+                    },
+                  );
+                }),
+            )
+            .then(async ([config, args]: [T | U, any[]]) => {
+              if (after === undefined) return next(...args);
+              await after(config);
+              return next(...args);
+            })
+            .catch((err) => {
+              next(err);
+            });
         } as mocha.Func),
     ];
   }
-  // Define our main entry point
-  function they(msg: string, fn: TheyFunc<T> | TheyAsyncFunc<T>): mocha.Test[] {
+  // Define the main entry point
+  const they: They<U> = (msg, fn) => {
     return configs.map((config, i) => {
       return it(...handle.call(null, msg, labels[i], fn, config));
     });
-  }
+  };
   // Mocha `only` implementation
-  they.only = function (
-    msg: string,
-    fn: TheyFunc<T> | TheyAsyncFunc<T>,
-  ): mocha.Test[] {
+  they.only = function (msg, fn) {
     return configs.map((config, i) => {
       return it.only(...handle.call(null, msg, labels[i], fn, config));
     });
   };
   // Mocha `skip` implementation
-  they.skip = function (
-    msg: string,
-    fn: TheyFunc<T> | TheyAsyncFunc<T>,
-  ): mocha.Test[] {
+  they.skip = function (msg, fn) {
     return configs.map((config, i) => {
       return it.skip(...handle.call(null, msg, labels[i], fn, config));
     });
