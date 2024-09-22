@@ -168,7 +168,7 @@ It returns a new function which behave exactly like the `it` function in mocha. 
 
 ## Example using the before and after configuration hooks
 
-A more complexe example covers the [usage of `before` and `after`](./samples/before-after-typescript.ts). The `ssh` object is converted to a fake SSH client and the connection is closed after the tests.
+A more complexe example covers the [usage of `before` and `after`](./samples/before-after-typescript.ts). In this example, an `ssh` object is converted to a fake SSH client and the connection is closed after the tests.
 
 ```ts
 Test before/after usage
