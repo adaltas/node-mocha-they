@@ -182,6 +182,19 @@ Test before/after usage
   ✔ Called 3 times (2)
 ```
 
+## Release
+
+Versions are incremented using semantic versioning. Test and publishing are handled with Github Actions. To create a new version and publish it to NPM, run:
+
+```bash
+npm run release
+# Or (`git push` is only supported for the release script)
+npm run release:<major|minor|patch>
+git push --follow-tags origin master
+```
+
+The NPM publication is handled with the GitHub action.
+
 ## Contributors
 
 The project is sponsored by [Adaltas](https://www.adaltas.com), a company based in Paris, France. Adaltas offers support and consulting on distributed system, big data and open source.
