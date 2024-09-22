@@ -14,7 +14,7 @@ declare module "mocha" {
   // line 2290
   type Func = (this: Context, done: Done) => void;
   // line 2295
-  type AsyncFunc = (this: Context) => PromiseLike<any>;
+  type AsyncFunc = (this: Context) => PromiseLike<unknown>;
 }
 */
 
@@ -26,7 +26,7 @@ export type TheyFunc<T> = (
 export type TheyAsyncFunc<T> = (
   this: mocha.Context,
   config: T,
-) => PromiseLike<any>;
+) => PromiseLike<unknown>;
 
 type They<T> = {
   only: (msg: string, fn: TheyFunc<T> | TheyAsyncFunc<T>) => mocha.Test[];
@@ -48,7 +48,7 @@ function configure<T, U = T>(
   // Config normalization
   const labels = Array(configs.length);
   for (let i = 0; i < configs.length; i++) {
-    let config = configs[i];
+    const config = configs[i];
     if (typeof config === "object" && config !== null && "label" in config) {
       labels[i] = config?.label;
     } else {
@@ -74,16 +74,18 @@ function configure<T, U = T>(
           // return (fn as TheyAsyncFunc<T | U>).call(this, configNormalized);
           return Promise.resolve()
             .then(async () => {
-              let configNormalized =
+              const configNormalized =
+                // eslint-disable-next-line mocha/no-top-level-hooks
                 before === undefined ? config : await before(config);
               return configNormalized;
             })
-            .then((config): [T | U, any] => [
+            .then((config): [T | U, unknown] => [
               config,
               (fn as TheyAsyncFunc<T | U>).call(this, config),
             ])
             .then(async ([config, prom]) => {
               if (after === undefined) return prom;
+              // eslint-disable-next-line mocha/no-top-level-hooks
               await after(config);
               return prom;
             });
@@ -91,24 +93,26 @@ function configure<T, U = T>(
       : (function (this: mocha.Context, next: mocha.Done) {
           Promise.resolve()
             .then(async () => {
-              let configNormalized =
+              const configNormalized =
+                // eslint-disable-next-line mocha/no-sibling-hooks,mocha/no-top-level-hooks
                 before === undefined ? config : await before(config);
               return configNormalized;
             })
             .then(
               (config) =>
-                new Promise<[T | U, any[]]>((resolve) => {
+                new Promise<[T | U, unknown[]]>((resolve) => {
                   (fn as TheyFunc<T | U>).call(
                     this,
                     config,
-                    (...args: any[]) => {
+                    (...args: unknown[]) => {
                       resolve([config, args]);
                     },
                   );
                 }),
             )
-            .then(async ([config, args]: [T | U, any[]]) => {
+            .then(async ([config, args]: [T | U, unknown[]]) => {
               if (after === undefined) return next(...args);
+              // eslint-disable-next-line mocha/no-sibling-hooks,mocha/no-top-level-hooks
               await after(config);
               return next(...args);
             })
@@ -127,12 +131,14 @@ function configure<T, U = T>(
   // Mocha `only` implementation
   they.only = function (msg, fn) {
     return configs.map((config, i) => {
+      // eslint-disable-next-line mocha/no-exclusive-tests
       return it.only(...handle.call(null, msg, labels[i], fn, config));
     });
   };
   // Mocha `skip` implementation
   they.skip = function (msg, fn) {
     return configs.map((config, i) => {
+      // eslint-disable-next-line mocha/no-skipped-tests
       return it.skip(...handle.call(null, msg, labels[i], fn, config));
     });
   };

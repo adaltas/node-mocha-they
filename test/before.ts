@@ -1,4 +1,4 @@
-import { configure, TheyFunc, TheyAsyncFunc } from "../src/index.js";
+import { configure } from "../src/index.js";
 
 export class FakeSsh {
   async open() {}
@@ -17,6 +17,7 @@ export interface ConfigNormalized {
 
 const they = configure<Config, ConfigNormalized>(
   [{ ssh: { host: "127.0.0.1", username: process.env.USER } }],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (config: Config): ConfigNormalized => {
     const ssh = new FakeSsh();
     ssh.open();

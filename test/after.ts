@@ -3,6 +3,7 @@ import { FakeSsh, type Config, type ConfigNormalized } from "./before.js";
 
 const they = configure<Config, ConfigNormalized>(
   [{ ssh: { host: "127.0.0.1", username: process.env.USER } }],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (config: Config): ConfigNormalized => {
     const ssh = new FakeSsh();
     ssh.open();
@@ -21,7 +22,7 @@ describe("they.after", function () {
     await config.ssh.test();
     return Promise.resolve();
   });
-  
+
   they("with callback", function (config: { ssh: FakeSsh }, callback) {
     config.ssh.test().then(() => {
       callback();
