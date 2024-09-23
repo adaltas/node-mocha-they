@@ -14,6 +14,34 @@
   "license": "MIT",
   "author": "David Worms <david@adaltas.com> (https://www.adaltas.com)",
   "contributors": [],
+  "dependencies": {
+    "mixme": "^1.1.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@eslint/core": "^0.6.0",
+    "@eslint/js": "^9.11.1",
+    "@types/eslint__js": "^8.42.3",
+    "@types/mocha": "^10.0.8",
+    "@types/should": "^13.0.0",
+    "eslint": "^9.11.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-mocha": "^10.5.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "mocha": "^10.7.3",
+    "prettier": "^3.3.3",
+    "should": "^13.2.3",
+    "standard-version": "^9.5.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.1",
+    "typedoc": "^0.26.7",
+    "typedoc-plugin-markdown": "^4.2.8",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.7.0"
+  },
   "engines": {
     "node": ">=0.10.1"
   },
@@ -30,45 +58,19 @@
   },
   "main": "./lib/index",
   "mocha": {
+    "inline-diffs": true,
     "loader": "ts-node/esm",
     "recursive": true,
+    "reporter": "spec",
     "require": [
       "should"
     ],
-    "reporter": "spec",
     "throw-deprecation": false,
     "timeout": 40000
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/adaltas/node-mocha-they.git"
-  },
-  "dependencies": {
-    "mixme": "^1.1.0"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^19.5.0",
-    "@commitlint/config-conventional": "^19.5.0",
-    "@eslint/core": "^0.6.0",
-    "@eslint/js": "^9.11.0",
-    "@types/eslint__js": "^8.42.3",
-    "@types/mocha": "^10.0.8",
-    "eslint": "^9.11.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-mocha": "^10.5.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "husky": "^9.1.6",
-    "lint-staged": "^15.2.10",
-    "mocha": "^10.7.3",
-    "prettier": "^3.3.3",
-    "should": "^13.2.3",
-    "standard-version": "^9.5.0",
-    "ts-node": "^10.9.2",
-    "tsx": "^4.19.1",
-    "typedoc": "^0.26.7",
-    "typedoc-plugin-markdown": "^4.2.7",
-    "typescript": "^5.6.2",
-    "typescript-eslint": "^8.6.0"
   },
   "scripts": {
     "build": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
