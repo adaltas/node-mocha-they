@@ -79,10 +79,12 @@ function configure<T, U = T>(
                 before === undefined ? config : await before(config);
               return configNormalized;
             })
-            .then((config): [T | U, unknown] => [
-              config,
-              (fn as TheyAsyncFunc<T | U>).call(this, config),
-            ])
+            .then(
+              async (config): Promise<[T | U, unknown]> => [
+                config,
+                await (fn as TheyAsyncFunc<T | U>).call(this, config),
+              ],
+            )
             .then(async ([config, prom]) => {
               if (after === undefined) return prom;
               // eslint-disable-next-line mocha/no-top-level-hooks
