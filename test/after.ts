@@ -3,8 +3,7 @@ import { FakeSsh, type Config, type ConfigNormalized } from "./before.js";
 
 const they = configure<Config, ConfigNormalized>(
   [{ ssh: { host: "127.0.0.1", username: process.env.USER } }],
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  (config: Config): ConfigNormalized => {
+  (): ConfigNormalized => {
     const ssh = new FakeSsh();
     ssh.open();
     const configNormalized: ConfigNormalized = {
