@@ -79,17 +79,27 @@ function configure<T, U = T>(
                 before === undefined ? config : await before(config);
               return configNormalized;
             })
-            .then(
-              async (config): Promise<[T | U, unknown]> => [
-                config,
-                await (fn as TheyAsyncFunc<T | U>).call(this, config),
-              ],
-            )
-            .then(async ([config, prom]) => {
-              if (after === undefined) return prom;
-              // eslint-disable-next-line mocha/no-top-level-hooks
-              await after(config);
-              return prom;
+            .then(async (config): Promise<[T | U, unknown, unknown]> => {
+              try {
+                return [
+                  config,
+                  undefined,
+                  await (fn as TheyAsyncFunc<T | U>).call(this, config),
+                ];
+              } catch (err: unknown) {
+                return [config, err, undefined];
+              }
+            })
+            .then(async ([config, err, prom]) => {
+              if (after !== undefined) {
+                // eslint-disable-next-line mocha/no-top-level-hooks
+                await after(config);
+              }
+              if (err) {
+                throw err;
+              } else {
+                return prom;
+              }
             });
         } as mocha.AsyncFunc)
       : (function (this: mocha.Context, next: mocha.Done) {
