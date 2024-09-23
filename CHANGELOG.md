@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/adaltas/node-mocha-they/compare/v0.1.6...v0.1.7) (2024-09-23)
+
+### Bug Fixes
+
+- call after on error in async handler ([e9cab9d](https://github.com/adaltas/node-mocha-they/commit/e9cab9dce6ca194660c83d93ea609cecd51d4258))
+
 ### [0.1.6](https://github.com/adaltas/node-mocha-they/compare/v0.1.4...v0.1.6) (2024-09-23)
 
 ### Bug Fixes
