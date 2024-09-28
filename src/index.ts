@@ -114,25 +114,31 @@ function configure<T, U = T>(
             .then(
               (config) =>
                 // Handler execution
-                new Promise<[T | U, unknown[]]>((resolve) => {
-                  (fn as TheyFunc<T | U>).call(
-                    this,
-                    config,
-                    (...args: unknown[]) => {
-                      resolve([config, args]);
-                    },
-                  );
+                new Promise<[T | U, unknown, unknown[]]>((resolve) => {
+                  try {
+                    (fn as TheyFunc<T | U>).call(
+                      this,
+                      config,
+                      (...args: unknown[]) => {
+                        resolve([config, null, args]);
+                      },
+                    );
+                  } catch (err) {
+                    resolve([config, err, []]);
+                  }
                 }),
             )
-            .then(async ([config, args]: [T | U, unknown[]]) => {
+            .then(async ([config, err, args]: [T | U, unknown, unknown[]]) => {
               // After hook
-              if (after === undefined) return next(...args);
-              // eslint-disable-next-line mocha/no-sibling-hooks,mocha/no-top-level-hooks
-              await after(config);
-              return next(...args);
-            })
-            .catch((err) => {
-              next(err);
+              if (after !== undefined) {
+                // eslint-disable-next-line mocha/no-top-level-hooks,mocha/no-sibling-hooks
+                await after(config);
+              }
+              if (err) {
+                throw next(err);
+              } else {
+                return next(...args);
+              }
             });
         } as mocha.Func),
     ];
