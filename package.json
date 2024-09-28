@@ -24,7 +24,6 @@
     "@eslint/js": "^9.11.1",
     "@types/eslint__js": "^8.42.3",
     "@types/mocha": "^10.0.8",
-    "@types/should": "^13.0.0",
     "eslint": "^9.11.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-mocha": "^10.5.0",

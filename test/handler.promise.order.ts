@@ -1,4 +1,3 @@
-import "should";
 import { configure } from "../src/index.js";
 
 interface Config {
