@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://github.com/adaltas/node-mocha-they/compare/v0.1.7...v0.1.8) (2024-09-28)
+
+### Bug Fixes
+
+- infer typing in promise fn argument ([d623ad8](https://github.com/adaltas/node-mocha-they/commit/d623ad866f9633322d4a414e524b67b9ae4bfd24))
+
 ### [0.1.7](https://github.com/adaltas/node-mocha-they/compare/v0.1.6...v0.1.7) (2024-09-23)
 
 ### Bug Fixes
