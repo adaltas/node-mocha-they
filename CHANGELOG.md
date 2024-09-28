@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/adaltas/node-mocha-they/compare/v0.1.8...v0.1.9) (2024-09-28)
+
+### Bug Fixes
+
+- catch error in callback function ([657ad56](https://github.com/adaltas/node-mocha-they/commit/657ad56c50b1ac3e86ddd219fd8b85bc1a430ea4))
+
 ### [0.1.8](https://github.com/adaltas/node-mocha-they/compare/v0.1.7...v0.1.8) (2024-09-28)
 
 ### Bug Fixes
