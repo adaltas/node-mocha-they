@@ -23,15 +23,11 @@ export type TheyFunc<T> = (
   config: T,
   done: mocha.Done,
 ) => void;
-export type TheyAsyncFunc<T> = (
-  this: mocha.Context,
-  config: T,
-) => PromiseLike<unknown>;
 
 type They<T> = {
-  only: (msg: string, fn: TheyFunc<T> | TheyAsyncFunc<T>) => mocha.Test[];
-  skip: (msg: string, fn: TheyFunc<T> | TheyAsyncFunc<T>) => mocha.Test[];
-  (msg: string, fn: TheyFunc<T> | TheyAsyncFunc<T>): mocha.Test[];
+  only: (msg: string, fn: TheyFunc<T>) => mocha.Test[];
+  skip: (msg: string, fn: TheyFunc<T>) => mocha.Test[];
+  (msg: string, fn: TheyFunc<T>): mocha.Test[];
 };
 
 function configure<T>(configs: (T | (() => T))[]): They<T>;
@@ -59,7 +55,7 @@ function configure<T, U = T>(
   function handle(
     msg: string,
     label: string,
-    fn: TheyFunc<U> | TheyAsyncFunc<U>,
+    fn: TheyFunc<U>,
     config: T | (() => T),
   ): [string, mocha.Func | mocha.AsyncFunc] {
     if (typeof config === "function") {
@@ -71,26 +67,29 @@ function configure<T, U = T>(
       `${msg} (${label})`,
       fn.length === 0 || fn.length === 1 ?
         (function (this: mocha.Context) {
-          // return (fn as TheyAsyncFunc<T | U>).call(this, configNormalized);
+          // Promise Style
           return Promise.resolve()
             .then(async () => {
+              // Before hook
               const configNormalized =
                 // eslint-disable-next-line mocha/no-top-level-hooks
                 before === undefined ? config : await before(config);
               return configNormalized;
             })
             .then(async (config): Promise<[T | U, unknown, unknown]> => {
+              // Handler execution
               try {
                 return [
                   config,
                   undefined,
-                  await (fn as TheyAsyncFunc<T | U>).call(this, config),
+                  await (fn as TheyFunc<T | U>).call(this, config, () => {}),
                 ];
               } catch (err: unknown) {
                 return [config, err, undefined];
               }
             })
             .then(async ([config, err, prom]) => {
+              // After hook
               if (after !== undefined) {
                 // eslint-disable-next-line mocha/no-top-level-hooks
                 await after(config);
@@ -103,8 +102,10 @@ function configure<T, U = T>(
             });
         } as mocha.AsyncFunc)
       : (function (this: mocha.Context, next: mocha.Done) {
+          // Callback Style
           Promise.resolve()
             .then(async () => {
+              // Before hook
               const configNormalized =
                 // eslint-disable-next-line mocha/no-sibling-hooks,mocha/no-top-level-hooks
                 before === undefined ? config : await before(config);
@@ -112,6 +113,7 @@ function configure<T, U = T>(
             })
             .then(
               (config) =>
+                // Handler execution
                 new Promise<[T | U, unknown[]]>((resolve) => {
                   (fn as TheyFunc<T | U>).call(
                     this,
@@ -123,6 +125,7 @@ function configure<T, U = T>(
                 }),
             )
             .then(async ([config, args]: [T | U, unknown[]]) => {
+              // After hook
               if (after === undefined) return next(...args);
               // eslint-disable-next-line mocha/no-sibling-hooks,mocha/no-top-level-hooks
               await after(config);

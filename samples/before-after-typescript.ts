@@ -54,7 +54,7 @@ const they = configure<Config, ConfigConnected>(
 );
 
 describe("Test before/after usage", function () {
-  they("Called 3 times", function (config: ConfigConnected) {
+  they("Called 3 times", function (config) {
     if (config.ssh === undefined) {
       console.info(" ".repeat(6) + "SSH client not connected");
     } else {

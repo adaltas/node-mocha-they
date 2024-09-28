@@ -23,7 +23,7 @@ const they = configure<Config>([
 ]);
 
 describe("Test mocha-they", function () {
-  they("Call 2 times", function (conf: Config) {
+  they("Call 2 times", function (conf) {
     if (conf.ssh === undefined) {
       console.info(" ".repeat(6) + "Got null.");
     } else {

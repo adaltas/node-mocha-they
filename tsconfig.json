@@ -11,6 +11,7 @@
     /* Enable all strict type-checking options. */
     "strict": true,
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "allowSyntheticDefaultImports": true
   }
 }
