@@ -64,7 +64,7 @@
     "require": [
       "should"
     ],
-    "throw-deprecation": false,
+    "throw-deprecation": true,
     "timeout": 40000
   },
   "repository": {
