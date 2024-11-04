@@ -25,6 +25,10 @@ The package exports a function, `configure`. It is written in Typescript and exp
 
 ```ts
 import { configure } from "mocha-they";
+// Or (they is an alias of configure)
+import { they } from "mocha-they";
+// Or (ESM only)
+import configure from "mocha-they";
 ```
 
 Test functions receive a new argument.

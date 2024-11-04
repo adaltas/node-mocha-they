@@ -167,5 +167,6 @@ function configure<T, U = T>(
   return they;
 }
 
+export default configure;
 export { configure };
 export const they = configure;
