@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.11](https://github.com/adaltas/node-mocha-they/compare/v0.1.10...v0.1.11) (2024-11-04)
+
+### Features
+
+- default export for esm usage ([9226734](https://github.com/adaltas/node-mocha-they/commit/92267349b9422fea0e682a81ff902d4a806c2c68))
+
 ### [0.1.10](https://github.com/adaltas/node-mocha-they/compare/v0.1.9...v0.1.10) (2024-09-28)
 
 ### [0.1.9](https://github.com/adaltas/node-mocha-they/compare/v0.1.8...v0.1.9) (2024-09-28)
